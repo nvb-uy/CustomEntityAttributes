@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "custom_entity_attributes",
+	"version": "${version}",
+	"name": "Custom Entity Attributes (CEA)",
+	"description": "Customize attributes of entities, globally, per dimension, biome and more.",
+	"authors": [
+		"ElocinDev"
+	],
+	"contact": {
+		"homepage": "https://github.com/nvb-uy/",
+		"sources": "https://github.com/nvb-uy/CustomEntityAttributes"
+	},
+	"license": "AGNYA License",
+	"icon": "assets/customentityattributes/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"elocindev.customentityattributes.CustomEntityAttributes"
+		]
+	},
+	"mixins": [
+		"customentityattributes.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"necronomicon": ">=1.6.0"
+	}
+}
