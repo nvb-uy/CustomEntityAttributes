@@ -46,7 +46,7 @@ public class EntityLoadCallback {
 
                     instance.removeModifier(uuid);
 
-                    instance.addPersistentModifier(
+                    instance.addTemporaryModifier(
                         new EntityAttributeModifier(
                             uuid.toString(),
                             attribute.getDouble(),
@@ -91,7 +91,7 @@ public class EntityLoadCallback {
 
                         instance.removeModifier(uuid);
 
-                        instance.addPersistentModifier(
+                        instance.addTemporaryModifier(
                             new EntityAttributeModifier(
                                 uuid.toString(),
                                 attribute.getDouble(),
