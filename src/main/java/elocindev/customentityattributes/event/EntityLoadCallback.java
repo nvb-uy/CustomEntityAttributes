@@ -20,6 +20,7 @@ public class EntityLoadCallback {
     public static void register() {
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
 			if (entity instanceof LivingEntity livingEntity) {
+
                 float old_hp = livingEntity.getMaxHealth();
                 float old_percentage = livingEntity.getHealth() / old_hp;
 
@@ -116,6 +117,7 @@ public class EntityLoadCallback {
 
     public static boolean isValidDifficulty(World world, String source, String regex) {
         if (("hard_only".equals(regex) || "hard_only".matches(regex)) && world.getLevelProperties().isHardcore()) return false;
+        if ("hardcore".matches(regex) && world.getLevelProperties().isHardcore()) return true;
 
         return source.equals(regex) || source.matches(regex);
     }
