@@ -37,22 +37,23 @@ public class EntityLoadCallback {
             String ent_regex = property.entity_regex;
 
             if (isValid(NecUtilsAPI.getEntityId(livingEntity), ent_regex)) {
-                
                 for (GenericAttribute<?, ?> attribute : property.attributes) {
                     try {
-                    UUID uuid = UUID.nameUUIDFromBytes(("cea"+attribute.toString()+attribute.getOperation().getId()+((int)attribute.getDouble())).getBytes());
-                    EntityAttributeInstance instance = livingEntity.getAttributeInstance(attribute.getAttribute());
-                    if (instance == null) continue;
+                        if (property.apply_chance < 100 && Math.random() * 100 > property.apply_chance) continue;
 
-                    instance.removeModifier(uuid);
+                        UUID uuid = UUID.nameUUIDFromBytes(("cea"+attribute.toString()+attribute.getOperation().getId()+((int)attribute.getDouble())).getBytes());
+                        EntityAttributeInstance instance = livingEntity.getAttributeInstance(attribute.getAttribute());
+                        if (instance == null) continue;
 
-                    instance.addTemporaryModifier(
-                        new EntityAttributeModifier(
-                            uuid.toString(),
-                            attribute.getDouble(),
-                            attribute.getOperation()
-                        )
-                    );
+                        instance.removeModifier(uuid);
+
+                        instance.addTemporaryModifier(
+                            new EntityAttributeModifier(
+                                uuid.toString(),
+                                attribute.getDouble(),
+                                attribute.getOperation()
+                            )
+                        );
 
                     } catch (InvalidAttributeException e) {
                         e.printStackTrace();
@@ -83,8 +84,13 @@ public class EntityLoadCallback {
                 isValid(biomeId, property.biome_regex) &&
                 isValidDifficulty(world, difficulty, property.difficulty_regex)) {
                 
+                if (!livingEntity.isBaby() && property.only_apply_to_babies) continue;
+
                 for (GenericAttribute<?, ?> attribute : property.attributes) {
                     try {
+                        if (property.apply_chance < 100 && Math.random() * 100 > property.apply_chance) continue;
+                        if ((world.isDay() && property.time_regex.equals("night")) || world.isNight() && property.time_regex.equals("day")) continue;
+
                         UUID uuid = UUID.nameUUIDFromBytes(("cea" + attribute.toString() + attribute.getOperation().getId() + ((int) attribute.getDouble())).getBytes());
                         EntityAttributeInstance instance = livingEntity.getAttributeInstance(attribute.getAttribute());
                         if (instance == null) continue;
@@ -119,10 +125,12 @@ public class EntityLoadCallback {
         if (("hard_only".equals(regex) || "hard_only".matches(regex)) && world.getLevelProperties().isHardcore()) return false;
         if ("hardcore".matches(regex) && world.getLevelProperties().isHardcore()) return true;
 
-        return source.equals(regex) || source.matches(regex);
+        return isValid(source, regex);
     }
 
     public static boolean isValid(String source, String regex) {
+        if (regex.equals("*")) return true;
+
         return source.equals(regex) || source.matches(regex);
     }
 }

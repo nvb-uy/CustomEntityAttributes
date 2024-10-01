@@ -12,7 +12,7 @@ import elocindev.necronomicon.config.NecConfig;
 public class CEABasicConfig {
     public static final String FOLDER = "custom_entity_attributes";
     public static final String FILE_NAME = "basic.json5";
-    public static final int CURRENT_CONFIG_VERSION = 2;
+    public static final int CURRENT_CONFIG_VERSION = 1;
 
     @NecConfig
     public static CEABasicConfig INSTANCE;
@@ -36,6 +36,7 @@ public class CEABasicConfig {
     @Comment("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
     @Comment("Option Index:")
     @Comment("  entity_regex   :        Entity's ID (Supports regex). For example: minecraft:zombie (to affect zombies) or minecraft:.* (to affect all minecraft entities)")
+    @Comment("  apply_chance   :        The chance the modifier will be applied to the entity. 100.0 is 100% chance, 50.0 is 50% chance, etc.")
     @Comment("  attribute_overrides :   A List of attribute modifiers to add, you can add as many as you want.")
     @Comment("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------")
     @Comment("The example showcases a config to add +10 attack damage and +20% attack speed to an example_entity.")
@@ -56,6 +57,7 @@ public class CEABasicConfig {
     public List<BasicEntityAttributeHolder> modifiers = List.of(
         new BasicEntityAttributeHolder(
             "examplemod:example_entity",
+            100.0f,
             List.of(
                 new GenericAttribute<>("minecraft:generic.attack_damage", 10.0, "ADDITION"),
                 new GenericAttribute<>("minecraft:generic.attack_speed", 0.20, "MULTIPLY_BASE")
