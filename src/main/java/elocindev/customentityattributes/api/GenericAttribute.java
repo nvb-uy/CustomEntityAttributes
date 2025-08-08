@@ -48,7 +48,7 @@ public class GenericAttribute<A, V> {
             case "MULTIPLY_BASE":
                 return Operation.ADD_MULTIPLIED_BASE;
             case "MULTIPLY_TOTAL":
-                return Operation.ADD_MULTIPLIED_BASE;
+                return Operation.ADD_MULTIPLIED_TOTAL;
         }
 
         return Operation.ADD_VALUE;
