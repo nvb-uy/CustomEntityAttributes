@@ -1,10 +1,10 @@
 package elocindev.customentityattributes.api;
 
-import elocindev.necronomicon.api.ResourceIdentifier;
 
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 
 public class GenericAttribute<A, V> {
     private A attribute;
@@ -24,7 +24,7 @@ public class GenericAttribute<A, V> {
 
     public EntityAttribute getAttribute() throws InvalidAttributeException {
         if (attribute instanceof String attributeId) {
-            EntityAttribute entAttribute = Registries.ATTRIBUTE.get(ResourceIdentifier.get(attributeId));
+            EntityAttribute entAttribute = Registries.ATTRIBUTE.get(Identifier.tryParse(attributeId));
 
             if (entAttribute != null) 
                 return entAttribute;
@@ -44,14 +44,14 @@ public class GenericAttribute<A, V> {
     public Operation getOperation() {
         switch (this.operation) {
             case "ADDITION":
-                return Operation.ADDITION;
+                return Operation.ADD_VALUE;
             case "MULTIPLY_BASE":
-                return Operation.MULTIPLY_BASE;
+                return Operation.ADD_MULTIPLIED_BASE;
             case "MULTIPLY_TOTAL":
-                return Operation.MULTIPLY_TOTAL;
+                return Operation.ADD_MULTIPLIED_TOTAL;
         }
 
-        return Operation.ADDITION;
+        return Operation.ADD_VALUE;
     }
 
     public double getDouble() throws InvalidAttributeException {

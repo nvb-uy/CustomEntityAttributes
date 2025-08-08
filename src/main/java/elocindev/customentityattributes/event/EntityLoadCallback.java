@@ -14,6 +14,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class EntityLoadCallback {
@@ -42,14 +45,15 @@ public class EntityLoadCallback {
                         if (property.apply_chance < 100 && Math.random() * 100 > property.apply_chance) continue;
 
                         UUID uuid = UUID.nameUUIDFromBytes(("cea"+attribute.toString()+attribute.getOperation().getId()+((int)attribute.getDouble())).getBytes());
-                        EntityAttributeInstance instance = livingEntity.getAttributeInstance(attribute.getAttribute());
+                        if(Registries.ATTRIBUTE.getEntry(Identifier.tryParse(attribute.getString())).isEmpty()) continue;
+                        EntityAttributeInstance instance = livingEntity.getAttributeInstance(Registries.ATTRIBUTE.getEntry(Identifier.tryParse(attribute.getString())).get());
                         if (instance == null) continue;
 
-                        instance.removeModifier(uuid);
+                        instance.removeModifier(Identifier.of(CustomEntityAttributes.MOD_ID,uuid.toString()));
 
                         instance.addTemporaryModifier(
                             new EntityAttributeModifier(
-                                uuid.toString(),
+                                Identifier.of(CustomEntityAttributes.MOD_ID,uuid.toString()),
                                 attribute.getDouble(),
                                 attribute.getOperation()
                             )
@@ -92,14 +96,16 @@ public class EntityLoadCallback {
                         if ((world.isDay() && property.time_regex.equals("night")) || world.isNight() && property.time_regex.equals("day")) continue;
 
                         UUID uuid = UUID.nameUUIDFromBytes(("cea" + attribute.toString() + attribute.getOperation().getId() + ((int) attribute.getDouble())).getBytes());
-                        EntityAttributeInstance instance = livingEntity.getAttributeInstance(attribute.getAttribute());
+                        System.out.println(attribute.getAttribute().toString());
+                        if(Registries.ATTRIBUTE.getEntry(Identifier.tryParse(attribute.getString())).isEmpty()) continue;
+                        EntityAttributeInstance instance = livingEntity.getAttributeInstance(Registries.ATTRIBUTE.getEntry(Identifier.tryParse(attribute.getString())).get());
                         if (instance == null) continue;
 
-                        instance.removeModifier(uuid);
+                        instance.removeModifier(Identifier.of(CustomEntityAttributes.MOD_ID,uuid.toString()));
 
                         instance.addTemporaryModifier(
                             new EntityAttributeModifier(
-                                uuid.toString(),
+                                    Identifier.of(CustomEntityAttributes.MOD_ID,uuid.toString()),
                                 attribute.getDouble(),
                                 attribute.getOperation()
                             )
